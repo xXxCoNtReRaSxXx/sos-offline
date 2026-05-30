@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Guía de emergencias y primeros auxilios que funciona sin conexión a internet. Gratuita, privada y de código abierto." />
+  <meta name="theme-color" content="#b00020" />
+  <title>SOS Offline — Emergencias sin conexión</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icons/icon.svg" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true">🆘</span>
+      <div>
+        <h1 class="brand__title">SOS Offline</h1>
+        <p class="brand__tagline">Emergencias y primeros auxilios sin conexión</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span id="net-status" class="net-status" role="status" aria-live="polite"></span>
+      <button id="text-size" class="icon-btn" type="button" aria-pressed="false" title="Aumentar tamaño del texto">
+        <span aria-hidden="true">A+</span>
+        <span class="sr-only">Aumentar tamaño del texto</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="content">
+    <!-- Llamada rápida a emergencias -->
+    <section class="call-bar" aria-label="Llamada de emergencia">
+      <a id="call-emergency" class="call-bar__btn" href="tel:112">
+        <span class="call-bar__icon" aria-hidden="true">📞</span>
+        <span>
+          Llamar a emergencias
+          <strong id="call-number">112</strong>
+        </span>
+      </a>
+      <label class="call-bar__select">
+        <span class="sr-only">Elegir número de emergencias por región</span>
+        <select id="region-select"></select>
+      </label>
+    </section>
+
+    <p class="disclaimer" role="note">
+      ⚠️ Esta información es educativa y no sustituye a los servicios de emergencia
+      ni a un profesional sanitario. En una emergencia real, llama siempre a tu
+      número local de emergencias.
+    </p>
+
+    <!-- Navegación por pestañas -->
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" id="tab-first-aid" aria-controls="panel-first-aid" aria-selected="true">Primeros auxilios</button>
+      <button class="tab" role="tab" id="tab-disasters" aria-controls="panel-disasters" aria-selected="false">Desastres</button>
+      <button class="tab" role="tab" id="tab-contacts" aria-controls="panel-contacts" aria-selected="false">Mis contactos</button>
+    </nav>
+
+    <!-- Buscador -->
+    <div class="search-wrap" id="search-wrap">
+      <input id="search" type="search" placeholder="Buscar una guía…" aria-label="Buscar una guía" autocomplete="off" />
+    </div>
+
+    <section id="panel-first-aid" class="panel" role="tabpanel" aria-labelledby="tab-first-aid" tabindex="0">
+      <div id="first-aid-list" class="card-grid"></div>
+    </section>
+
+    <section id="panel-disasters" class="panel" role="tabpanel" aria-labelledby="tab-disasters" tabindex="0" hidden>
+      <div id="disasters-list" class="card-grid"></div>
+    </section>
+
+    <section id="panel-contacts" class="panel" role="tabpanel" aria-labelledby="tab-contacts" tabindex="0" hidden>
+      <p class="panel__intro">
+        Guarda contactos personales (familia, vecinos, médico). Se almacenan
+        <strong>solo en este dispositivo</strong>; nunca se envían a ningún servidor.
+      </p>
+      <form id="contact-form" class="contact-form">
+        <label>Nombre
+          <input id="contact-name" type="text" required maxlength="60" placeholder="Ej. María (vecina)" />
+        </label>
+        <label>Teléfono
+          <input id="contact-phone" type="tel" required maxlength="30" placeholder="Ej. +34 600 000 000" />
+        </label>
+        <button class="btn-primary" type="submit">Añadir contacto</button>
+      </form>
+      <ul id="contacts-list" class="contacts-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <!-- Diálogo de detalle de una guía -->
+  <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title">
+    <article>
+      <header class="guide-dialog__head">
+        <h2 id="guide-title"></h2>
+        <button id="guide-close" class="icon-btn" type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <div id="guide-body" class="guide-body"></div>
+    </article>
+  </dialog>
+
+  <footer class="app-footer">
+    <p>
+      Código abierto (MIT) ·
+      <a href="https://github.com/" id="repo-link" rel="noopener">Ver en GitHub</a> ·
+      Funciona sin conexión
+    </p>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

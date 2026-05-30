@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Guía de primeros auxilios, crisis y emergencias que funciona sin conexión a internet. Gratuita, privada y de código abierto." />
+  <meta name="theme-color" content="#cf2630" />
+  <title>SOS Offline — Emergencias sin conexión</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icons/icon.svg" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- Cabecera tipo "hero" centrada (estética moderna) -->
+  <header class="hero">
+    <span id="net-status" class="net-status" role="status" aria-live="polite"></span>
+    <div class="hero__logo" aria-hidden="true">🆘</div>
+    <h1 class="hero__title">SOS Offline</h1>
+    <p class="hero__tagline">Primeros auxilios y emergencias, siempre disponibles — incluso sin conexión.</p>
+  </header>
+
+  <main id="main" class="content">
+    <!-- Llamada rápida a emergencias -->
+    <section class="call-bar" aria-label="Llamada de emergencia">
+      <a id="call-emergency" class="call-bar__btn" href="tel:112">
+        <span class="call-bar__icon" aria-hidden="true">📞</span>
+        <span class="call-bar__label">
+          Llamar a emergencias
+          <strong id="call-number">112</strong>
+        </span>
+      </a>
+      <label class="call-bar__select">
+        <span class="sr-only">Elegir país para el número de emergencias</span>
+        <select id="region-select"></select>
+      </label>
+    </section>
+    <div id="service-chips" class="service-chips" aria-label="Servicios de emergencia"></div>
+
+    <p class="disclaimer" role="note">
+      ⚠️ Información educativa: no sustituye a los servicios de emergencia ni a un
+      profesional sanitario. En una emergencia real, llama siempre a tu número local.
+    </p>
+
+    <!-- Navegación por pestañas -->
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" id="tab-first-aid" aria-controls="panel-first-aid" aria-selected="true">🩹 Primeros auxilios</button>
+      <button class="tab" role="tab" id="tab-crisis" aria-controls="panel-crisis" aria-selected="false">⚠️ Crisis y seguridad</button>
+      <button class="tab" role="tab" id="tab-disasters" aria-controls="panel-disasters" aria-selected="false">🌪️ Desastres</button>
+      <button class="tab" role="tab" id="tab-contacts" aria-controls="panel-contacts" aria-selected="false">👥 Mis contactos</button>
+    </nav>
+
+    <div class="search-wrap" id="search-wrap">
+      <input id="search" type="search" placeholder="Buscar una guía…" aria-label="Buscar una guía" autocomplete="off" />
+    </div>
+
+    <section id="panel-first-aid" class="panel" role="tabpanel" aria-labelledby="tab-first-aid" tabindex="0">
+      <div id="first-aid-list" class="card-grid"></div>
+    </section>
+
+    <section id="panel-crisis" class="panel" role="tabpanel" aria-labelledby="tab-crisis" tabindex="0" hidden>
+      <p class="panel__intro">
+        Guías para situaciones de drogas, armas y violencia. Tu seguridad es lo
+        primero: actúa solo cuando la zona sea segura.
+      </p>
+      <div id="crisis-list" class="card-grid"></div>
+    </section>
+
+    <section id="panel-disasters" class="panel" role="tabpanel" aria-labelledby="tab-disasters" tabindex="0" hidden>
+      <div id="disasters-list" class="card-grid"></div>
+    </section>
+
+    <section id="panel-contacts" class="panel" role="tabpanel" aria-labelledby="tab-contacts" tabindex="0" hidden>
+      <p class="panel__intro">
+        Guarda contactos personales (familia, vecinos, médico). Se almacenan
+        <strong>solo en este dispositivo</strong>; nunca se envían a ningún servidor.
+      </p>
+      <form id="contact-form" class="contact-form">
+        <label>Nombre
+          <input id="contact-name" type="text" required maxlength="60" placeholder="Ej. María (vecina)" />
+        </label>
+        <label>Teléfono
+          <input id="contact-phone" type="tel" required maxlength="30" placeholder="Ej. +34 600 000 000" />
+        </label>
+        <button class="btn-primary" type="submit">Añadir contacto</button>
+      </form>
+      <ul id="contacts-list" class="contacts-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <!-- Diálogo de detalle de una guía -->
+  <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title">
+    <article>
+      <header class="guide-dialog__head">
+        <div class="guide-dialog__heading">
+          <span id="guide-ill" class="guide-dialog__ill" aria-hidden="true"></span>
+          <h2 id="guide-title"></h2>
+        </div>
+        <div class="guide-dialog__actions">
+          <button id="guide-speak" class="chip-btn" type="button" aria-pressed="false">
+            <span aria-hidden="true">🔊</span> Leer
+          </button>
+          <button id="guide-close" class="icon-btn" type="button" aria-label="Cerrar">✕</button>
+        </div>
+      </header>
+      <div id="guide-body" class="guide-body"></div>
+    </article>
+  </dialog>
+
+  <!-- Botón flotante de accesibilidad (sigue al usuario) -->
+  <div class="a11y-fab" id="a11y-fab">
+    <div class="a11y-menu" id="a11y-menu" role="menu" aria-label="Opciones de accesibilidad" hidden>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label">Tamaño del texto</span>
+        <div class="a11y-menu__group">
+          <button id="font-dec" class="a11y-btn" type="button" aria-label="Reducir tamaño del texto">A−</button>
+          <button id="font-inc" class="a11y-btn" type="button" aria-label="Aumentar tamaño del texto">A+</button>
+        </div>
+      </div>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label">Tema</span>
+        <button id="theme-toggle" class="a11y-btn a11y-btn--wide" type="button" aria-pressed="false">
+          <span id="theme-label">Oscuro</span>
+        </button>
+      </div>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label">Alto contraste</span>
+        <button id="contrast-toggle" class="a11y-btn a11y-btn--wide" type="button" aria-pressed="false">
+          <span id="contrast-label">Activar</span>
+        </button>
+      </div>
+    </div>
+    <button id="a11y-toggle" class="a11y-fab__btn" type="button" aria-expanded="false" aria-controls="a11y-menu" aria-label="Opciones de accesibilidad">
+      <span aria-hidden="true">♿</span>
+    </button>
+  </div>
+
+  <footer class="app-footer">
+    <p>
+      Código abierto (MIT) ·
+      <a href="https://github.com/" id="repo-link" rel="noopener">Ver en GitHub</a> ·
+      Funciona sin conexión · <span class="ver">v2</span>
+    </p>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/illustrations.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

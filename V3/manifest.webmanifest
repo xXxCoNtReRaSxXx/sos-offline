@@ -1,0 +1,20 @@
+{
+  "name": "SOS Offline — Emergencias sin conexión",
+  "short_name": "SOS Offline",
+  "description": "Guía de primeros auxilios, crisis y desastres que funciona sin conexión a internet. Gratuita, privada y de código abierto.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf9f5",
+  "theme_color": "#cf2630",
+  "categories": ["health", "utilities", "lifestyle"],
+  "icons": [
+    { "src": "assets/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
