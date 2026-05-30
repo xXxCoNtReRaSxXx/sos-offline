@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Guía de primeros auxilios, crisis y emergencias que funciona sin conexión. Gratuita, privada y de código abierto. Español, English, Português, Français, Deutsch, Italiano, 中文." />
+  <meta name="theme-color" content="#cf2630" />
+  <title>SOS Offline — Emergencias sin conexión</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" id="skip-link" href="#main">↓</a>
+
+  <header class="hero">
+    <span id="net-status" class="net-status" role="status" aria-live="polite"></span>
+    <span class="hero__logo" id="hero-logo" aria-hidden="true"></span>
+    <h1 class="hero__title">SOS Offline</h1>
+    <p class="hero__tagline" id="hero-tagline"></p>
+  </header>
+
+  <main id="main" class="content">
+    <!-- Números de emergencia -->
+    <section class="emergency" aria-labelledby="emergency-title">
+      <div class="emergency__head">
+        <h2 class="emergency__title" id="emergency-title">
+          <span class="emergency__title-ic" data-icon="phone"></span>
+          <span id="emergency-title-txt"></span>
+        </h2>
+        <div class="emergency__controls">
+          <button id="country-btn" class="country-btn" type="button">
+            <span class="country-btn__badge" id="country-badge"></span>
+            <span class="country-btn__name" id="country-name"></span>
+            <span class="country-btn__chev" data-icon="chevron"></span>
+          </button>
+          <button id="detect-btn" class="detect-btn" type="button">
+            <span data-icon="detect"></span><span id="detect-txt"></span>
+          </button>
+        </div>
+      </div>
+      <div id="num-grid" class="num-grid" aria-label="Emergencia"></div>
+    </section>
+
+    <p class="disclaimer" id="disclaimer" role="note"></p>
+
+    <!-- Navegación por pestañas -->
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" id="tab-first-aid" aria-controls="panel-first-aid" aria-selected="true">
+        <span class="tab__ic" data-icon="firstaid"></span><span class="tab__txt" id="txt-firstaid"></span>
+      </button>
+      <button class="tab" role="tab" id="tab-crisis" aria-controls="panel-crisis" aria-selected="false">
+        <span class="tab__ic" data-icon="crisis"></span><span class="tab__txt" id="txt-crisis"></span>
+      </button>
+      <button class="tab" role="tab" id="tab-disasters" aria-controls="panel-disasters" aria-selected="false">
+        <span class="tab__ic" data-icon="disasters"></span><span class="tab__txt" id="txt-disasters"></span>
+      </button>
+      <button class="tab" role="tab" id="tab-contacts" aria-controls="panel-contacts" aria-selected="false">
+        <span class="tab__ic" data-icon="contacts"></span><span class="tab__txt" id="txt-contacts"></span>
+      </button>
+    </nav>
+
+    <div class="search-wrap" id="search-wrap">
+      <span class="search-ic" data-icon="search"></span>
+      <input id="search" type="search" aria-label="Buscar" autocomplete="off" />
+    </div>
+
+    <section id="panel-first-aid" class="panel" role="tabpanel" aria-labelledby="tab-first-aid" tabindex="0">
+      <div id="first-aid-list" class="card-grid"></div>
+    </section>
+    <section id="panel-crisis" class="panel" role="tabpanel" aria-labelledby="tab-crisis" tabindex="0" hidden>
+      <p class="panel__intro" id="crisis-intro"></p>
+      <div id="crisis-list" class="card-grid"></div>
+    </section>
+    <section id="panel-disasters" class="panel" role="tabpanel" aria-labelledby="tab-disasters" tabindex="0" hidden>
+      <div id="disasters-list" class="card-grid"></div>
+    </section>
+    <section id="panel-contacts" class="panel" role="tabpanel" aria-labelledby="tab-contacts" tabindex="0" hidden>
+      <p class="panel__intro" id="contacts-intro"></p>
+      <form id="contact-form" class="contact-form">
+        <label><span id="lbl-name"></span>
+          <input id="contact-name" type="text" required maxlength="60" />
+        </label>
+        <label><span id="lbl-phone"></span>
+          <input id="contact-phone" type="tel" required maxlength="30" />
+        </label>
+        <button class="btn-primary" type="submit" id="add-contact"></button>
+      </form>
+      <ul id="contacts-list" class="contacts-list" aria-live="polite"></ul>
+    </section>
+
+    <!-- Resultados de la búsqueda global (todas las categorías) -->
+    <section id="panel-search" class="panel" aria-label="Resultados" hidden>
+      <div id="search-results" class="card-grid"></div>
+      <p id="search-empty" class="empty" hidden></p>
+    </section>
+  </main>
+
+  <!-- Diálogo de detalle de una guía -->
+  <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title">
+    <article>
+      <header class="guide-dialog__head">
+        <div class="guide-dialog__heading">
+          <span id="guide-ill" class="guide-dialog__ill" aria-hidden="true"></span>
+          <h2 id="guide-title"></h2>
+        </div>
+        <button id="guide-close" class="icon-btn" type="button"><span data-icon="close"></span></button>
+      </header>
+      <div id="guide-body" class="guide-body"></div>
+      <footer class="guide-dialog__foot">
+        <button id="guide-speak" class="foot-btn" type="button" aria-pressed="false">
+          <span data-icon="read"></span><span id="speak-text"></span>
+        </button>
+        <button id="guide-download" class="foot-btn foot-btn--primary" type="button">
+          <span data-icon="download"></span><span id="download-text"></span>
+        </button>
+      </footer>
+    </article>
+  </dialog>
+
+  <!-- Selector de país (animado) -->
+  <dialog id="country-dialog" class="country-dialog" aria-labelledby="country-dialog-title">
+    <header class="country-dialog__head">
+      <h2 id="country-dialog-title"></h2>
+      <button id="country-close" class="icon-btn" type="button"><span data-icon="close"></span></button>
+    </header>
+    <button id="country-detect" class="detect-row" type="button">
+      <span data-icon="detect"></span><span id="country-detect-txt"></span>
+    </button>
+    <div class="country-search">
+      <span class="search-ic" data-icon="search"></span>
+      <input id="country-search-input" type="search" autocomplete="off" />
+    </div>
+    <ul id="country-list" class="country-list"></ul>
+  </dialog>
+
+  <!-- Botón flotante de accesibilidad -->
+  <div class="a11y-fab" id="a11y-fab">
+    <div class="a11y-menu" id="a11y-menu" role="menu" hidden>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label"><span data-icon="globe"></span> <span id="lbl-language"></span></span>
+        <select id="lang-select" class="a11y-select"></select>
+      </div>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label" id="lbl-textsize"></span>
+        <div class="a11y-menu__group">
+          <button id="font-dec" class="a11y-btn" type="button">A−</button>
+          <button id="font-inc" class="a11y-btn" type="button">A+</button>
+        </div>
+      </div>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label" id="lbl-theme"></span>
+        <button id="theme-toggle" class="a11y-btn a11y-btn--wide" type="button" aria-pressed="false">
+          <span id="theme-icon" data-icon="moon"></span><span id="theme-label"></span>
+        </button>
+      </div>
+      <div class="a11y-menu__row">
+        <span class="a11y-menu__label" id="lbl-contrast"></span>
+        <button id="contrast-toggle" class="a11y-btn a11y-btn--wide" type="button" aria-pressed="false">
+          <span id="contrast-label"></span>
+        </button>
+      </div>
+    </div>
+    <button id="a11y-toggle" class="a11y-fab__btn" type="button" aria-expanded="false" aria-controls="a11y-menu">
+      <span data-icon="accessibility"></span>
+    </button>
+  </div>
+
+  <footer class="app-footer">
+    <p>
+      <span id="foot-os"></span> ·
+      <a href="https://github.com/xXxCoNtReRaSxXx/sos-offline" id="repo-link" rel="noopener"><span id="foot-github"></span></a> ·
+      <span id="foot-offline"></span> · <span class="ver">v5</span>
+    </p>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/content-extra.js"></script>
+  <script src="assets/js/illustrations.js"></script>
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
